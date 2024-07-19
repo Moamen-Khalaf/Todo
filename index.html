@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo</title>
+    <link rel="stylesheet" href="styles/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+  </head>
+  <body>
+    <img src="imgs/bg.jpg" alt="hmoe-image" />
+    <div class="container">
+      <nav>
+        <h1>TODO</h1>
+      </nav>
+      <main>
+        <div class="add-task">
+          <input type="text" placeholder="Create a new todo..." />
+          <input type="submit" value="ADD" />
+        </div>
+        <section class="tasks">
+          <span>Tasks list is empty!</span>
+          <div class="bottom-menu">
+            <div class="count">
+              <span>0</span>
+              <span>item left</span>
+            </div>
+            <button type="button">Clear Completed</button>
+          </div>
+        </section>
+        <section class="filter">
+          <button type="button" class="All">All</button>
+          <button type="button" class="Achive">Achive</button>
+          <button type="button" class="Completed">Completed</button>
+        </section>
+      </main>
+    </div>
+    <footer class="container">
+      <p class="mes">Drag and drop fo reorder list</p>
+      Challenge by Frontend Mentor.Coded by Moamen Khalaf.
+    </footer>
+    <script src="scripts/index.js"></script>
+  </body>
+</html>
