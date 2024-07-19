@@ -7,7 +7,6 @@ const UI = {
   tasks: [],
   clearCompleted: document.querySelector(".clr-completed"),
 };
-
 let task = class {
   content = "";
   archived = false;
@@ -100,8 +99,11 @@ if (localStorage.getItem("savedTasks")) {
     return savedItem;
   });
 }
+if (localStorage.getItem("savedInput")) {
+  UI.newTodo.value = localStorage.getItem("savedInput");
+}
 window.onbeforeunload = function (e) {
-  window.localStorage.clear();
+  window.localStorage.removeItem("savedTasks");
   window.localStorage.setItem(
     "savedTasks",
     JSON.stringify(
@@ -112,8 +114,25 @@ window.onbeforeunload = function (e) {
   );
 };
 UI.addBtn.onclick = () => {
-  let ntask = new task(UI.newTodo.value);
-  UI.tasksContainer.prepend(ntask.taskElement);
-  UI.tasks.push(ntask);
-  UI.newTodo.value = "";
+  if (UI.newTodo.value.trim() != "") {
+    let ntask = new task(UI.newTodo.value);
+    UI.tasksContainer.prepend(ntask.taskElement);
+    UI.tasks.push(ntask);
+    UI.newTodo.value = "";
+  }
+};
+UI.clearCompleted.onclick = () => {
+  UI.tasks = UI.tasks.filter((ele) => {
+    return !ele.completed;
+  });
+  let allTasks = UI.tasksContainer.querySelectorAll(".task");
+  allTasks.forEach((ele) => {
+    ele.remove();
+  });
+  UI.tasks.forEach((ele) => {
+    UI.tasksContainer.prepend(ele.taskElement);
+  });
+};
+UI.newTodo.onblur = () => {
+  localStorage.setItem("savedInput", UI.newTodo.value);
 };
