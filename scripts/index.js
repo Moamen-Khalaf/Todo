@@ -5,6 +5,7 @@ const UI = {
   tasksContainer: document.querySelector(".tasks"),
   btnMenu: document.querySelector(".bottom-menu"),
   tasks: [],
+  clearCompleted: document.querySelector(".clr-completed"),
 };
 
 let task = class {
@@ -13,6 +14,12 @@ let task = class {
   order = -1;
   taskElement = null;
   completed = false;
+  taskContainer = document.createElement("div");
+  checkArea = document.createElement("div");
+  taskCheck = document.createElement("input");
+  taskContent = document.createElement("span");
+  archive = document.createElement("span");
+  close = document.createElement("span");
   constructor(content = "", order = 0) {
     this.content = content;
     this.order = order;
@@ -24,62 +31,62 @@ let task = class {
     this.archived = archived;
     this.completed = completed;
     this.taskElement = this.#createTask();
+    if (archived) {
+      this.archive.click();
+    }
+    if (completed) {
+      this.checkArea.click();
+    }
     return this;
   };
   #createTask = function () {
-    let taskContainer = document.createElement("div");
-    taskContainer.className = "task";
-    let checkArea = document.createElement("div");
-    checkArea.className = "check-area";
-    let taskCheck = document.createElement("input");
-    taskCheck.type = "checkbox";
-    let taskContent = document.createElement("span");
-    taskContent.className = "content";
-    taskContent.innerHTML = this.content;
-    let archive = document.createElement("span");
-    archive.className = "material-symbols-outlined";
-    archive.innerHTML = "archive";
-    let close = document.createElement("span");
-    close.className = "material-symbols-outlined";
-    close.innerHTML = "close";
-    taskCheck.onclick = () => {
-      checkArea.click();
+    this.taskContainer.className = "task";
+    this.checkArea.className = "check-area";
+    this.taskCheck.type = "checkbox";
+    this.taskContent.className = "content";
+    this.taskContent.innerHTML = this.content;
+    this.archive.className = "material-symbols-outlined";
+    this.archive.innerHTML = "archive";
+    this.close.className = "material-symbols-outlined";
+    this.close.innerHTML = "close";
+    this.taskCheck.onclick = () => {
+      this.checkArea.click();
     };
-    checkArea.onclick = () => {
-      if (taskCheck.checked) {
-        taskCheck.checked = false;
+    this.checkArea.onclick = () => {
+      if (this.taskCheck.checked) {
+        this.taskCheck.checked = false;
         this.completed = false;
       } else {
-        taskCheck.checked = true;
+        this.taskCheck.checked = true;
         this.completed = true;
         UI.btnMenu.before(this.taskElement);
       }
     };
-    close.onclick = () => {
-      close.parentElement.remove();
+    this.close.onclick = () => {
+      this.close.parentElement.remove();
       const index = UI.tasks.indexOf(this);
       if (index > -1) {
         UI.tasks.splice(index, 1);
       }
     };
-    archive.onclick = () => {
-      if (archive.innerHTML === "archive") {
-        archive.innerHTML = "unarchive";
+    this.archive.onclick = () => {
+      if (this.archive.innerHTML === "archive") {
+        this.archive.innerHTML = "unarchive";
         this.taskElement.style.opacity = ".2";
         this.archived = true;
         UI.btnMenu.before(this.taskElement);
       } else {
-        archive.innerHTML = "archive";
+        this.archive.innerHTML = "archive";
         this.taskElement.style.opacity = "1";
         this.archived = false;
       }
     };
-    checkArea.appendChild(taskCheck);
-    checkArea.appendChild(taskContent);
-    taskContainer.appendChild(checkArea);
-    taskContainer.appendChild(archive);
-    taskContainer.appendChild(close);
-    return taskContainer;
+    this.checkArea.appendChild(this.taskCheck);
+    this.checkArea.appendChild(this.taskContent);
+    this.taskContainer.appendChild(this.checkArea);
+    this.taskContainer.appendChild(this.archive);
+    this.taskContainer.appendChild(this.close);
+    return this.taskContainer;
   };
   serilize = () => {
     return [this.content, this.order, this.archived, this.completed];
@@ -89,11 +96,9 @@ if (localStorage.getItem("savedTasks")) {
   UI.tasks = JSON.parse(localStorage.getItem("savedTasks"));
   UI.tasks = UI.tasks.map((ele) => {
     let savedItem = new task().deserilize(ele);
-    console.log(savedItem.completed, savedItem.archived);
     UI.tasksContainer.prepend(savedItem.taskElement);
     return savedItem;
   });
-  console.log(UI.tasks);
 }
 window.onbeforeunload = function (e) {
   window.localStorage.clear();
