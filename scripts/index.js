@@ -31,12 +31,12 @@ let task = class {
   order = -1;
   taskElement = null;
   completed = false;
-  taskContainer = document.createElement("div");
-  checkArea = document.createElement("div");
-  taskCheck = document.createElement("input");
-  taskContent = document.createElement("span");
-  archive = document.createElement("span");
-  close = document.createElement("span");
+  taskContainer = null;
+  checkArea = null;
+  taskCheck = null;
+  taskContent = null;
+  archive = null;
+  close = null;
   constructor(content = "", order = 0) {
     this.content = content;
     this.order = order;
@@ -57,6 +57,13 @@ let task = class {
     return this;
   };
   #createTask = function () {
+    this.taskContainer = document.createElement("div");
+    this.checkArea = document.createElement("div");
+    this.taskCheck = document.createElement("input");
+    this.taskContent = document.createElement("span");
+    this.archive = document.createElement("span");
+    this.close = document.createElement("span");
+
     this.taskContainer.className = "task";
     this.checkArea.className = "check-area";
     this.taskCheck.type = "checkbox";
@@ -160,6 +167,7 @@ UI.addBtn.onclick = () => {
     empCheck(false);
     UI.tasks.push(ntask);
     UI.newTodo.value = "";
+    localStorage.removeItem("savedInput");
     updateCount();
   }
 };
@@ -179,7 +187,7 @@ UI.clearCompleted.onclick = () => {
     } else if (UI.completedbtn.classList.contains("active") && ele.completed) {
       UI.tasksContainer.prepend(ele.taskElement);
       checkExists = false;
-    } else {
+    } else if (UI.allbtn.classList.contains("active")) {
       UI.tasksContainer.prepend(ele.taskElement);
       checkExists = false;
     }
