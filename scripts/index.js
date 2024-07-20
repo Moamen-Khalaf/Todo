@@ -67,44 +67,16 @@ let task = class {
     this.close.className = "material-symbols-outlined";
     this.close.innerHTML = "close";
     this.taskCheck.onclick = () => {
-      this.checkArea.click();
+      this.toggleCheckTask();
     };
     this.checkArea.onclick = () => {
-      if (this.taskCheck.checked) {
-        this.taskCheck.checked = false;
-        this.completed = false;
-        if (UI.completedbtn.classList.contains("active")) {
-          UI.completedbtn.click();
-        }
-      } else {
-        this.taskCheck.checked = true;
-        this.completed = true;
-        UI.btnMenu.before(this.taskElement);
-      }
-      updateCount();
+      this.toggleCheckTask();
     };
     this.close.onclick = () => {
-      this.close.parentElement.remove();
-      const index = UI.tasks.indexOf(this);
-      if (index > -1) {
-        UI.tasks.splice(index, 1);
-      }
-      empCheck(UI.tasks.length === 0);
+      this.deleteTask();
     };
     this.archive.onclick = () => {
-      if (this.archive.innerHTML === "archive") {
-        this.archive.innerHTML = "unarchive";
-        this.taskElement.style.opacity = ".2";
-        this.archived = true;
-        UI.btnMenu.before(this.taskElement);
-      } else {
-        this.archive.innerHTML = "archive";
-        this.taskElement.style.opacity = "1";
-        this.archived = false;
-        if (UI.archivedbtn.classList.contains("active")) {
-          UI.archivedbtn.click();
-        }
-      }
+      this.archiveTask();
     };
     this.checkArea.appendChild(this.taskCheck);
     this.checkArea.appendChild(this.taskContent);
@@ -115,6 +87,44 @@ let task = class {
   };
   serilize = () => {
     return [this.content, this.order, this.archived, this.completed];
+  };
+  archiveTask = () => {
+    if (this.archive.innerHTML === "archive") {
+      this.archive.innerHTML = "unarchive";
+      this.taskElement.style.opacity = ".2";
+      this.archived = true;
+      UI.btnMenu.before(this.taskElement);
+    } else {
+      this.archive.innerHTML = "archive";
+      this.taskElement.style.opacity = "1";
+      this.archived = false;
+      if (UI.archivedbtn.classList.contains("active")) {
+        UI.archivedbtn.click();
+      }
+    }
+  };
+  deleteTask = () => {
+    this.close.parentElement.remove();
+    const index = UI.tasks.indexOf(this);
+    if (index > -1) {
+      UI.tasks.splice(index, 1);
+    }
+    empCheck(UI.tasks.length === 0);
+    updateCount();
+  };
+  toggleCheckTask = () => {
+    if (this.taskCheck.checked) {
+      this.taskCheck.checked = false;
+      this.completed = false;
+      if (UI.completedbtn.classList.contains("active")) {
+        UI.completedbtn.click();
+      }
+    } else {
+      this.taskCheck.checked = true;
+      this.completed = true;
+      UI.btnMenu.before(this.taskElement);
+    }
+    updateCount();
   };
 };
 if (localStorage.getItem("savedTasks")) {
@@ -176,7 +186,7 @@ UI.clearCompleted.onclick = () => {
   });
   empCheck(checkExists);
 };
-UI.newTodo.onblur = () => {
+UI.newTodo.onchange = () => {
   localStorage.setItem("savedInput", UI.newTodo.value);
 };
 UI.archivedbtn.onclick = () => {
