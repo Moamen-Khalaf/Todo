@@ -25,6 +25,9 @@ body > img {
   margin: 2rem auto;
   nav {
     margin-bottom: 5px;
+    h1 {
+      padding: 0 1rem;
+    }
   }
   main {
     display: flex;
@@ -35,7 +38,6 @@ body > img {
     align-items: center;
     .add-task {
       display: flex;
-      width: 70%;
       justify-content: center;
       align-items: center;
       border-radius: 10px;
@@ -59,7 +61,6 @@ body > img {
     }
     .tasks {
       background-color: #25273c;
-      width: 70%;
       border-radius: 10px;
       overflow: hidden;
       > span {
@@ -117,7 +118,6 @@ body > img {
     .filter {
       display: flex;
       padding: 1rem;
-      width: 70%;
       border-radius: 10px;
       overflow: hidden;
       background-color: #25273c;
@@ -151,9 +151,21 @@ footer {
   position: static;
   bottom: 0;
 }
+@media (min-width: 200px) {
+  .filter,
+  .tasks,
+  .add-task {
+    width: 90%;
+  }
+}
 @media (min-width: 576px) {
   .container {
     max-width: 540px;
+  }
+  .filter,
+  .tasks,
+  .add-task {
+    width: 70%;
   }
 }
 @media (min-width: 768px) {
