@@ -169,6 +169,9 @@ UI.clearCompleted.onclick = () => {
     } else if (UI.completedbtn.classList.contains("active") && ele.completed) {
       UI.tasksContainer.prepend(ele.taskElement);
       checkExists = false;
+    } else {
+      UI.tasksContainer.prepend(ele.taskElement);
+      checkExists = false;
     }
   });
   empCheck(checkExists);

@@ -168,11 +168,11 @@ footer {
 }
 @media (min-width: 1200px) {
   .container {
-    max-width: 1140px;
+    max-width: 800px;
   }
 }
-@media (min-width: 1400px) {
+/* @media (min-width: 1400px) {
   .container {
     max-width: 1320px;
   }
-}
+} */
