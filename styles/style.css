@@ -132,7 +132,7 @@ body > img {
         transition-duration: 0.1s;
         transition-timing-function: linear;
       }
-      button:active {
+      button.active {
         font-weight: bold;
         color: #fff;
       }

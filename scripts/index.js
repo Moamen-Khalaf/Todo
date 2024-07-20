@@ -6,6 +6,9 @@ const UI = {
   btnMenu: document.querySelector(".bottom-menu"),
   tasks: [],
   clearCompleted: document.querySelector(".clr-completed"),
+  archivedTasks: document.querySelector(".Achived"),
+  allbtn: document.querySelector(".All"),
+  completedbtn: document.querySelector(".Completed"),
 };
 let task = class {
   content = "";
@@ -116,7 +119,9 @@ window.onbeforeunload = function (e) {
 UI.addBtn.onclick = () => {
   if (UI.newTodo.value.trim() != "") {
     let ntask = new task(UI.newTodo.value);
-    UI.tasksContainer.prepend(ntask.taskElement);
+    if (UI.allbtn.classList.contains("active")) {
+      UI.tasksContainer.prepend(ntask.taskElement);
+    }
     UI.tasks.push(ntask);
     UI.newTodo.value = "";
   }
@@ -130,9 +135,58 @@ UI.clearCompleted.onclick = () => {
     ele.remove();
   });
   UI.tasks.forEach((ele) => {
-    UI.tasksContainer.prepend(ele.taskElement);
+    if (UI.archivedTasks.classList.contains("active") && ele.archived) {
+      UI.tasksContainer.prepend(ele.taskElement);
+    } else if (UI.completedbtn.classList.contains("active") && ele.completed) {
+      UI.tasksContainer.prepend(ele.taskElement);
+    }
   });
 };
 UI.newTodo.onblur = () => {
   localStorage.setItem("savedInput", UI.newTodo.value);
+};
+UI.archivedTasks.onclick = () => {
+  UI.archivedTasks.parentElement.querySelectorAll("*").forEach((ele) => {
+    ele.classList.remove("active");
+  });
+  UI.archivedTasks.classList.add("active");
+  let allArchivedTasks = UI.tasks.filter((ele) => {
+    return ele.archived;
+  });
+  let allTasks = UI.tasksContainer.querySelectorAll(".task");
+  allTasks.forEach((ele) => {
+    ele.remove();
+  });
+  allArchivedTasks.forEach((ele) => {
+    UI.tasksContainer.prepend(ele.taskElement);
+  });
+};
+UI.allbtn.onclick = () => {
+  UI.archivedTasks.parentElement.querySelectorAll("*").forEach((ele) => {
+    ele.classList.remove("active");
+  });
+  UI.allbtn.classList.add("active");
+  let allTasks = UI.tasksContainer.querySelectorAll(".task");
+  allTasks.forEach((ele) => {
+    ele.remove();
+  });
+  UI.tasks.forEach((ele) => {
+    UI.tasksContainer.prepend(ele.taskElement);
+  });
+};
+UI.completedbtn.onclick = () => {
+  UI.completedbtn.parentElement.querySelectorAll("*").forEach((ele) => {
+    ele.classList.remove("active");
+  });
+  UI.completedbtn.classList.add("active");
+  let allCompletedTasks = UI.tasks.filter((ele) => {
+    return ele.completed;
+  });
+  let allTasks = UI.tasksContainer.querySelectorAll(".task");
+  allTasks.forEach((ele) => {
+    ele.remove();
+  });
+  allCompletedTasks.forEach((ele) => {
+    UI.tasksContainer.prepend(ele.taskElement);
+  });
 };
