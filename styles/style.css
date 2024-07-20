@@ -149,8 +149,6 @@ footer {
   row-gap: 10rem;
   padding: 0 1rem;
   text-align: center;
-  position: static;
-  bottom: 0;
 }
 @media (min-width: 200px) {
   .filter,
