@@ -10,6 +10,7 @@ const UI = {
   allbtn: document.querySelector(".All"),
   completedbtn: document.querySelector(".Completed"),
   emptyLabel: document.querySelector(".tasks > span"),
+  notCompletedCount: document.querySelector(".count"),
 };
 let empCheck = (bool) => {
   if (bool) {
@@ -17,6 +18,12 @@ let empCheck = (bool) => {
   } else {
     UI.emptyLabel.style.display = "none";
   }
+};
+let updateCount = () => {
+  let counts = UI.tasks.filter((ele) => {
+    return !ele.completed;
+  }).length;
+  UI.notCompletedCount.innerHTML = `${counts}`;
 };
 let task = class {
   content = "";
@@ -66,11 +73,15 @@ let task = class {
       if (this.taskCheck.checked) {
         this.taskCheck.checked = false;
         this.completed = false;
+        if (UI.completedbtn.classList.contains("active")) {
+          UI.completedbtn.click();
+        }
       } else {
         this.taskCheck.checked = true;
         this.completed = true;
         UI.btnMenu.before(this.taskElement);
       }
+      updateCount();
     };
     this.close.onclick = () => {
       this.close.parentElement.remove();
@@ -90,6 +101,9 @@ let task = class {
         this.archive.innerHTML = "archive";
         this.taskElement.style.opacity = "1";
         this.archived = false;
+        if (UI.archivedbtn.classList.contains("active")) {
+          UI.archivedbtn.click();
+        }
       }
     };
     this.checkArea.appendChild(this.taskCheck);
@@ -110,8 +124,8 @@ if (localStorage.getItem("savedTasks")) {
     UI.tasksContainer.prepend(savedItem.taskElement);
     return savedItem;
   });
-  console.log(UI.tasks.length);
   empCheck(UI.tasks.length === 0);
+  updateCount();
 }
 if (localStorage.getItem("savedInput")) {
   UI.newTodo.value = localStorage.getItem("savedInput");
@@ -136,6 +150,7 @@ UI.addBtn.onclick = () => {
     empCheck(false);
     UI.tasks.push(ntask);
     UI.newTodo.value = "";
+    updateCount();
   }
 };
 UI.clearCompleted.onclick = () => {
