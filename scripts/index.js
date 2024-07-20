@@ -6,9 +6,17 @@ const UI = {
   btnMenu: document.querySelector(".bottom-menu"),
   tasks: [],
   clearCompleted: document.querySelector(".clr-completed"),
-  archivedTasks: document.querySelector(".Achived"),
+  archivedbtn: document.querySelector(".Achived"),
   allbtn: document.querySelector(".All"),
   completedbtn: document.querySelector(".Completed"),
+  emptyLabel: document.querySelector(".tasks > span"),
+};
+let empCheck = (bool) => {
+  if (bool) {
+    UI.emptyLabel.style.display = "block";
+  } else {
+    UI.emptyLabel.style.display = "none";
+  }
 };
 let task = class {
   content = "";
@@ -70,6 +78,7 @@ let task = class {
       if (index > -1) {
         UI.tasks.splice(index, 1);
       }
+      empCheck(UI.tasks.length === 0);
     };
     this.archive.onclick = () => {
       if (this.archive.innerHTML === "archive") {
@@ -101,6 +110,8 @@ if (localStorage.getItem("savedTasks")) {
     UI.tasksContainer.prepend(savedItem.taskElement);
     return savedItem;
   });
+  console.log(UI.tasks.length);
+  empCheck(UI.tasks.length === 0);
 }
 if (localStorage.getItem("savedInput")) {
   UI.newTodo.value = localStorage.getItem("savedInput");
@@ -122,6 +133,7 @@ UI.addBtn.onclick = () => {
     if (UI.allbtn.classList.contains("active")) {
       UI.tasksContainer.prepend(ntask.taskElement);
     }
+    empCheck(false);
     UI.tasks.push(ntask);
     UI.newTodo.value = "";
   }
@@ -134,35 +146,40 @@ UI.clearCompleted.onclick = () => {
   allTasks.forEach((ele) => {
     ele.remove();
   });
+  let checkExists = true;
   UI.tasks.forEach((ele) => {
-    if (UI.archivedTasks.classList.contains("active") && ele.archived) {
+    if (UI.archivedbtn.classList.contains("active") && ele.archived) {
       UI.tasksContainer.prepend(ele.taskElement);
+      checkExists = false;
     } else if (UI.completedbtn.classList.contains("active") && ele.completed) {
       UI.tasksContainer.prepend(ele.taskElement);
+      checkExists = false;
     }
   });
+  empCheck(checkExists);
 };
 UI.newTodo.onblur = () => {
   localStorage.setItem("savedInput", UI.newTodo.value);
 };
-UI.archivedTasks.onclick = () => {
-  UI.archivedTasks.parentElement.querySelectorAll("*").forEach((ele) => {
+UI.archivedbtn.onclick = () => {
+  UI.archivedbtn.parentElement.querySelectorAll("*").forEach((ele) => {
     ele.classList.remove("active");
   });
-  UI.archivedTasks.classList.add("active");
-  let allArchivedTasks = UI.tasks.filter((ele) => {
+  UI.archivedbtn.classList.add("active");
+  let allarchivedbtn = UI.tasks.filter((ele) => {
     return ele.archived;
   });
+  empCheck(allarchivedbtn.length === 0);
   let allTasks = UI.tasksContainer.querySelectorAll(".task");
   allTasks.forEach((ele) => {
     ele.remove();
   });
-  allArchivedTasks.forEach((ele) => {
+  allarchivedbtn.forEach((ele) => {
     UI.tasksContainer.prepend(ele.taskElement);
   });
 };
 UI.allbtn.onclick = () => {
-  UI.archivedTasks.parentElement.querySelectorAll("*").forEach((ele) => {
+  UI.archivedbtn.parentElement.querySelectorAll("*").forEach((ele) => {
     ele.classList.remove("active");
   });
   UI.allbtn.classList.add("active");
@@ -170,6 +187,7 @@ UI.allbtn.onclick = () => {
   allTasks.forEach((ele) => {
     ele.remove();
   });
+  empCheck(UI.tasks.length == 0);
   UI.tasks.forEach((ele) => {
     UI.tasksContainer.prepend(ele.taskElement);
   });
@@ -182,6 +200,7 @@ UI.completedbtn.onclick = () => {
   let allCompletedTasks = UI.tasks.filter((ele) => {
     return ele.completed;
   });
+  empCheck(allCompletedTasks.length == 0);
   let allTasks = UI.tasksContainer.querySelectorAll(".task");
   allTasks.forEach((ele) => {
     ele.remove();
